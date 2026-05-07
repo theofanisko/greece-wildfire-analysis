@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greece Wildfire Analysis — Portfolio Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --fire: #E85D24;
+    --fire-light: #F5A623;
+    --ash: #1A1814;
+    --smoke: #2C2924;
+    --ember: #3D3830;
+    --text: #F0EDE8;
+    --text-muted: #9C9488;
+    --text-dim: #5C5750;
+    --border: rgba(240,237,232,0.08);
+    --border-strong: rgba(240,237,232,0.15);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ash);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(232,93,36,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 20% 80%, rgba(245,166,35,0.06) 0%, transparent 50%),
+      var(--ash);
+    z-index: 0;
+  }
+
+  .hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  nav {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--fire);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px;
+    max-width: 900px;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--fire);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--fire);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(64px, 10vw, 120px);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 32px;
+  }
+
+  h1 span { color: var(--fire); }
+
+  .hero-desc {
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 560px;
+    font-weight: 300;
+    line-height: 1.8;
+    margin-bottom: 48px;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--fire);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  .btn-primary:hover { background: #c94d1a; transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 14px 28px;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--text-muted); color: var(--text); }
+
+  .hero-footer {
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-top: 1px solid var(--border);
+  }
+
+  .hero-stat {
+    padding: 32px 60px;
+    border-right: 1px solid var(--border);
+  }
+
+  .hero-stat:last-child { border-right: none; }
+
+  .hero-stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--fire);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .hero-stat-lbl {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 60px; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--fire);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--fire);
+    opacity: 0.5;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  /* OVERVIEW */
+  .overview { background: var(--smoke); }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 60px;
+  }
+
+  .overview-text p {
+    color: var(--text-muted);
+    font-weight: 300;
+    margin-bottom: 20px;
+    font-size: 16px;
+  }
+
+  .overview-text p strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .data-sources {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .data-source {
+    background: var(--ember);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .data-source:hover { border-color: var(--border-strong); }
+
+  .ds-icon {
+    width: 36px;
+    height: 36px;
+    background: rgba(232,93,36,0.15);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    color: var(--fire);
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .ds-info h4 {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .ds-info p {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* METHODOLOGY */
+  .methodology { background: var(--ash); }
+
+  .method-steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    margin-top: 60px;
+    border: 1px solid var(--border);
+  }
+
+  .method-step {
+    background: var(--ash);
+    padding: 40px 36px;
+    position: relative;
+  }
+
+  .step-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: var(--border-strong);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .step-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 8px;
+    border: 1px solid var(--border-strong);
+    border-radius: 2px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* FINDINGS */
+  .findings { background: var(--smoke); }
+
+  .findings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-top: 60px;
+  }
+
+  .finding-card {
+    background: var(--ember);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 36px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .finding-card:hover {
+    border-color: rgba(232,93,36,0.3);
+    transform: translateY(-2px);
+  }
+
+  .finding-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--fire);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .finding-card:hover::before { opacity: 1; }
+
+  .finding-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--fire);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .finding-num span {
+    font-size: 20px;
+    color: var(--text-muted);
+  }
+
+  .finding-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+
+  .finding-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .finding-card.highlight {
+    background: rgba(232,93,36,0.08);
+    border-color: rgba(232,93,36,0.25);
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .finding-card.highlight .finding-num {
+    font-size: 80px;
+  }
+
+  /* TECH STACK */
+  .tech { background: var(--ash); }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 60px;
+  }
+
+  .tech-item {
+    background: var(--smoke);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 24px;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+
+  .tech-item:hover { border-color: var(--border-strong); }
+
+  .tech-icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .tech-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .tech-role {
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* DAX SHOWCASE */
+  .dax-section { background: var(--smoke); }
+
+  .dax-showcase {
+    margin-top: 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .dax-card {
+    background: var(--ash);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .dax-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dax-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--fire);
+  }
+
+  .dax-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    background: var(--ember);
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .dax-code {
+    padding: 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    overflow-x: auto;
+  }
+
+  .kw { color: #569CD6; }
+  .fn { color: #DCDCAA; }
+  .str { color: #CE9178; }
+  .num { color: #B5CEA8; }
+  .cmt { color: var(--text-dim); font-style: italic; }
+  .tbl { color: #4EC9B0; }
+  .col { color: #9CDCFE; }
+
+  /* CTA SECTION */
+  .cta-section {
+    background: var(--ash);
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 100px 60px;
+  }
+
+  .cta-section h2 { margin-bottom: 16px; }
+
+  .cta-section p {
+    color: var(--text-muted);
+    font-size: 16px;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto 40px;
+  }
+
+  footer {
+    background: var(--smoke);
+    border-top: 1px solid var(--border);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-links a {
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--fire); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-tag { animation: fadeUp 0.6s ease both; }
+  h1 { animation: fadeUp 0.6s ease 0.1s both; }
+  .hero-desc { animation: fadeUp 0.6s ease 0.2s both; }
+  .hero-cta { animation: fadeUp 0.6s ease 0.3s both; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav, section, footer { padding-left: 24px; padding-right: 24px; }
+    .hero-content { padding: 60px 24px; }
+    .overview-grid, .findings-grid, .method-steps, .tech-grid, .dax-showcase { grid-template-columns: 1fr; }
+    .finding-card.highlight { grid-column: span 1; grid-template-columns: 1fr; }
+    .hero-footer { grid-template-columns: 1fr 1fr; }
+    .hero-stat { padding: 24px; }
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header>
+  <nav>
+    <div class="nav-logo">THEOFANIS KOTSIS/ Portfolio /Data Analysis</div>
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#methodology">Methodology</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#tech">Stack</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Case Study — 2020–2024</div>
+    <h1>Greece<br><span>Wildfire</span><br>Analysis</h1>
+    <p class="hero-desc">
+      A 5-year data analysis of wildfire incidents across Greece, combining Greek Fire Service records, hourly meteorological data, and geographic coordinates to uncover patterns, risk factors, and resource effectiveness.
+    </p>
+    <div class="hero-cta">
+      <a href="#findings" class="btn-primary">↓ View Findings</a>
+      <a href="#" class="btn-secondary">↗ Live Report</a>
+    </div>
+  </div>
+
+  <div class="hero-footer">
+    <div class="hero-stat">
+      <div class="hero-stat-val">3.87M</div>
+      <div class="hero-stat-lbl">acres Total Burned</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">27K</div>
+      <div class="hero-stat-lbl">Incidents Recorded</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">5 Yrs</div>
+      <div class="hero-stat-lbl">Data Coverage</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-val">3</div>
+      <div class="hero-stat-lbl">Data Sources Merged</div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="overview" id="overview">
+  <div class="section-label">Project Overview</div>
+  <h2>What & Why</h2>
+
+  <div class="overview-grid">
+    <div class="overview-text">
+      <p>
+        Greece faces a growing wildfire crisis. With climate change intensifying drought conditions and heat waves, understanding the patterns behind wildfire ignition and spread is critical for <strong>resource allocation and prevention policy</strong>.
+      </p>
+      <p>
+        This project integrates three independent datasets — fire service incident logs, weather station readings, and geographic coordinates — into a unified Power BI model, enabling analysis that no single source could support alone.
+      </p>
+      <p>
+        The goal was to move beyond simple incident counts and answer harder questions: <strong>Do weather conditions at ignition time predict final burned area? Which regions are chronically under-resourced? When is the risk truly "extreme"?</strong>
+      </p>
+    </div>
+
+    <div class="data-sources">
+      <div class="section-label" style="margin-bottom:16px">Data Sources</div>
+
+      <div class="data-source">
+        <div class="ds-icon">ΠΥ</div>
+        <div class="ds-info">
+          <h4>Greek Fire Service (ΠΥ)</h4>
+          <p>999+ incidents · 43 columns · 2020–2024</p>
+          <p style="margin-top:4px">Personnel, vehicles, aircraft, timestamps, coordinates</p>
+        </div>
+      </div>
+
+      <div class="data-source">
+        <div class="ds-icon">🌡</div>
+        <div class="ds-info">
+          <h4>Meteorological Stations</h4>
+          <p>Hourly readings · Per prefecture · 5 years</p>
+          <p style="margin-top:4px">Temp, humidity, wind speed & gusts, precipitation, pressure</p>
+        </div>
+      </div>
+
+      <div class="data-source">
+        <div class="ds-icon">📍</div>
+        <div class="ds-info">
+          <h4>Geographic Coordinates</h4>
+          <p>Greek prefectures · Lat/Lon centroids</p>
+          <p style="margin-top:4px">Used for map visuals and spatial join</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METHODOLOGY -->
+<section class="methodology" id="methodology">
+  <div class="section-label">Methodology</div>
+  <h2>How It Was Built</h2>
+
+  <div class="method-steps">
+    <div class="method-step">
+      <div class="step-num">01</div>
+      <div class="step-title">Data Modeling</div>
+      <p class="step-desc">Built a star schema in Power BI with Bridge tables for Calendar and Prefecture, enabling many-to-many relationship resolution between the fire and weather datasets.</p>
+      <div class="step-tags">
+        <span class="tag">Bridge_Calendar</span>
+        <span class="tag">Bridge_Νομοί</span>
+        <span class="tag">Star Schema</span>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-num">02</div>
+      <div class="step-title">Weather Join at Ignition</div>
+      <p class="step-desc">Used DAX LOOKUPVALUE to match each fire incident to the precise hourly weather reading at ignition time and prefecture — not daily averages — capturing the actual conditions at the moment of ignition.</p>
+      <div class="step-tags">
+        <span class="tag">LOOKUPVALUE</span>
+        <span class="tag">DateTime Join</span>
+        <span class="tag">Hour Precision</span>
+      </div>
+    </div>
+
+    <div class="method-step">
+      <div class="step-num">03</div>
+      <div class="step-title">Fire Weather Index</div>
+      <p class="step-desc">Developed a custom simplified FWI scoring model using temperature, relative humidity, wind speed, and precipitation — each scored 0–5 and combined into a 0–17 risk index with four danger categories.</p>
+      <div class="step-tags">
+        <span class="tag">Custom DAX</span>
+        <span class="tag">SWITCH Logic</span>
+        <span class="tag">Risk Scoring</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDINGS -->
+<section class="findings" id="findings">
+  <div class="section-label">Key Findings</div>
+  <h2>What The Data Reveals</h2>
+
+  <div class="findings-grid">
+
+    <div class="finding-card highlight">
+      <div>
+        <div class="finding-num">1.41<span>%</span></div>
+      </div>
+      <div>
+        <div class="finding-title">Extreme Conditions Drive Catastrophic Outcomes</div>
+        <p class="finding-desc">Just 1.41% of fires ignite under "Extreme" FWI conditions — yet they produce an average burned area of ~450 acres per incident, compared to ~5 acres under Low conditions. The vast majority of incidents (44.7%) occur under Moderate conditions, yet cause a fraction of the total damage. This confirms that early intervention in high-FWI scenarios is the highest-leverage policy intervention available.</p>
+      </div>
+    </div>
+
+    <div class="finding-card">
+      <div class="finding-num">2023</div>
+      <div class="finding-title">Worst Year on Record</div>
+      <p class="finding-desc">2023 saw 1.74M acres burned — a +520% YoY surge — following a relative calm in 2022 (0.24M). A clear 2-year catastrophic cycle emerged: 2021 (+525% YoY) and 2023 (+520% YoY) were both devastating years, suggesting a compounding fuel load dynamic.</p>
+    </div>
+
+    <div class="finding-card">
+      <div class="finding-num">770<span> acres</span></div>
+      <div class="finding-title">Burned Area per Aircraft</div>
+      <p class="finding-desc">Each aerial asset is associated with 770 acres of burned area — the highest of all resource types. Evros and Euboea are consistent outliers: high burned area combined with long completion times, suggesting structural resource gaps in northeastern Greece.</p>
+    </div>
+
+    <div class="finding-card">
+      <div class="finding-num">July</div>
+      <div class="finding-title">Peak Risk Month</div>
+      <p class="finding-desc">July records the highest incident count (6K), followed by August (5.2K). The FWI index peaks in these months, and the line chart confirms that average burned area closely follows the FWI curve — validating the index as a reliable seasonal predictor.</p>
+    </div>
+
+    <div class="finding-card">
+      <div class="finding-num">−</div>
+      <div class="finding-title">Humidity & Temperature: Inverse Correlation</div>
+      <p class="finding-desc">A strong negative correlation exists between temperature and relative humidity at ignition time. The scatter plot of avg humidity vs avg temperature shows a clear downward curve — as temperatures exceed 35°C, humidity drops below 20%, creating the conditions most associated with rapid fire spread.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- TECH STACK -->
+<section class="tech" id="tech">
+  <div class="section-label">Technical Stack</div>
+  <h2>Tools & Techniques</h2>
+
+  <div class="tech-grid">
+    <div class="tech-item">
+      <div class="tech-icon">📊</div>
+      <div class="tech-name">Power BI Desktop</div>
+      <div class="tech-role">Visualization & Reporting</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon">⚙️</div>
+      <div class="tech-name">DAX</div>
+      <div class="tech-role">Measures & Calculated Columns</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon">🔄</div>
+      <div class="tech-name">Power Query (M)</div>
+      <div class="tech-role">Data Transformation</div>
+    </div>
+    <div class="tech-item">
+      <div class="tech-icon">🗺️</div>
+      <div class="tech-name">Geospatial Join</div>
+      <div class="tech-role">Lat/Lon Coordinate Mapping</div>
+    </div>
+  </div>
+</section>
+
+<!-- DAX SHOWCASE -->
+<section class="dax-section" id="dax">
+  <div class="section-label">DAX Showcase</div>
+  <h2>Notable Measures</h2>
+
+  <div class="dax-showcase">
+
+    <div class="dax-card">
+      <div class="dax-header">
+        <span class="dax-title">FWI_Έναρξης</span>
+        <span class="dax-badge">Calculated Column</span>
+      </div>
+      <div class="dax-code">
+<span class="cmt">-- Custom Fire Weather Index (0–17)</span><br>
+<span class="kw">VAR</span> _temp = <span class="fn">VALUE</span>(<span class="tbl">'Φύλλο1'</span>[<span class="col">Temp_Έναρξης</span>])<br>
+<span class="kw">VAR</span> _rhum = <span class="fn">VALUE</span>(<span class="tbl">'Φύλλο1'</span>[<span class="col">Rhum_Έναρξης</span>])<br>
+<span class="kw">VAR</span> _wspd = <span class="fn">VALUE</span>(<span class="tbl">'Φύλλο1'</span>[<span class="col">Wspd_Έναρξης</span>])<br>
+<span class="kw">VAR</span> _temp_score =<br>
+&nbsp;&nbsp;<span class="fn">SWITCH</span>(<span class="kw">TRUE</span>(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_temp >= <span class="num">40</span>, <span class="num">5</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_temp >= <span class="num">35</span>, <span class="num">4</span>,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;_temp >= <span class="num">30</span>, <span class="num">3</span>, <span class="num">0</span>)<br>
+<span class="kw">RETURN</span><br>
+&nbsp;&nbsp;_temp_score + _rhum_score + _wspd_score
+      </div>
+    </div>
+
+    <div class="dax-card">
+      <div class="dax-header">
+        <span class="dax-title">Hydration YoY%</span>
+        <span class="dax-badge">Measure</span>
+      </div>
+      <div class="dax-code">
+<span class="cmt">-- Year-over-year humidity change</span><br>
+<span class="kw">VAR</span> __PREV_YEAR =<br>
+&nbsp;&nbsp;<span class="fn">CALCULATE</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">AVERAGE</span>(<span class="tbl">'Καιρός'</span>[<span class="col">rhum</span>]),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">DATEADD</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="tbl">'Bridge_Calendar'</span>[<span class="col">Date</span>],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="num">-1</span>, <span class="kw">YEAR</span>)<br>
+&nbsp;&nbsp;)<br>
+<span class="kw">RETURN</span><br>
+&nbsp;&nbsp;<span class="fn">DIVIDE</span>(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">AVERAGE</span>(<span class="tbl">'Καιρός'</span>[<span class="col">rhum</span>])<br>
+&nbsp;&nbsp;&nbsp;&nbsp;- __PREV_YEAR, __PREV_YEAR)
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label" style="justify-content:center">Get In Touch</div>
+  <h2>Interested in this work?</h2>
+  <p>Available for data analysis roles, freelance projects, and collaboration opportunities.</p>
+  <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap">
+    <a href="#" class="btn-primary">↗ View Live Report</a>
+    <a href="#" class="btn-secondary">↗ GitHub Repository</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 · Greece Wildfire Analysis · Built with Power BI</p>
+  <div class="footer-links">
+    <a href="www.linkedin.com/in/theofanis-kotsis">LinkedIn</a>
+    <a href="#">GitHub</a>
+    <a href="theofanisko@gmail.com">Email</a>
+  </div>
+</footer>
+
+</body>
+</html>
