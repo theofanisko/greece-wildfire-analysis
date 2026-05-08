@@ -9,26 +9,29 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --fire: #E85D24;
-    --fire-light: #F5A623;
-    --ash: #1A1814;
-    --smoke: #2C2924;
-    --ember: #3D3830;
-    --text: #F0EDE8;
-    --text-muted: #9C9488;
-    --text-dim: #5C5750;
-    --border: rgba(240,237,232,0.08);
-    --border-strong: rgba(240,237,232,0.15);
+    --fire:         #C05020;
+    --fire-light:   #D97030;
+    --bg-page:      #EDEBE0;
+    --bg-section:   #E2DFD0;
+    --bg-card:      #F3F2EA;
+    --ash:          #1E1C10;
+    --smoke:        #E2DFD0;
+    --ember:        #F3F2EA;
+    --text:         #1E1C10;
+    --text-muted:   #3A3820;
+    --text-dim:     #6A6850;
+    --border:       rgba(30,28,16,0.10);
+    --border-strong:rgba(30,28,16,0.20);
   }
 
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--ash);
+    background: var(--bg-page);
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    line-height: 1.7;
+    font-size: 18px;
+    line-height: 1.8;
     overflow-x: hidden;
   }
 
@@ -98,11 +101,11 @@
   .hero-content {
     position: relative;
     z-index: 10;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    align-items: center;
+    gap: 60px;
     padding: 80px 60px;
-    max-width: 900px;
   }
 
   .hero-tag {
@@ -137,12 +140,12 @@
   h1 span { color: var(--fire); }
 
   .hero-desc {
-    font-size: 18px;
-    color: var(--text-muted);
-    max-width: 560px;
+    font-size: 17px;
+    color: rgba(240,237,228,0.70);
+    max-width: 500px;
     font-weight: 300;
-    line-height: 1.8;
-    margin-bottom: 48px;
+    line-height: 1.9;
+    margin-bottom: 40px;
   }
 
   .hero-cta {
@@ -224,7 +227,7 @@
 
   .section-label {
     font-family: 'DM Mono', monospace;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--fire);
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -245,14 +248,15 @@
 
   h2 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 5vw, 56px);
+    font-size: clamp(40px, 5vw, 60px);
     letter-spacing: 0.03em;
     line-height: 1;
     margin-bottom: 20px;
+    color: var(--ash);
   }
 
   /* OVERVIEW */
-  .overview { background: var(--smoke); }
+  .overview { background: var(--bg-section); }
 
   .overview-grid {
     display: grid;
@@ -263,9 +267,9 @@
 
   .overview-text p {
     color: var(--text-muted);
-    font-weight: 300;
+    font-weight: 400;
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 17px;
   }
 
   .overview-text p strong {
@@ -280,7 +284,7 @@
   }
 
   .data-source {
-    background: var(--ember);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 20px 24px;
@@ -309,20 +313,20 @@
   }
 
   .ds-info h4 {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--ash);
     margin-bottom: 4px;
   }
 
   .ds-info p {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-dim);
     font-family: 'DM Mono', monospace;
   }
 
   /* METHODOLOGY */
-  .methodology { background: var(--ash); }
+  .methodology { background: var(--bg-page); }
 
   .method-steps {
     display: grid;
@@ -334,7 +338,7 @@
   }
 
   .method-step {
-    background: var(--ash);
+    background: var(--bg-card);
     padding: 40px 36px;
     position: relative;
   }
@@ -342,22 +346,22 @@
   .step-num {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 64px;
-    color: var(--border-strong);
+    color: rgba(30,28,16,0.12);
     line-height: 1;
     margin-bottom: 20px;
   }
 
   .step-title {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ash);
     margin-bottom: 12px;
   }
 
   .step-desc {
-    font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.7;
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.8;
   }
 
   .step-tags {
@@ -373,12 +377,12 @@
     padding: 3px 8px;
     border: 1px solid var(--border-strong);
     border-radius: 2px;
-    color: var(--text-muted);
+    color: var(--text-dim);
     letter-spacing: 0.08em;
   }
 
   /* FINDINGS */
-  .findings { background: var(--smoke); }
+  .findings { background: var(--bg-section); }
 
   .findings-grid {
     display: grid;
@@ -388,7 +392,7 @@
   }
 
   .finding-card {
-    background: var(--ember);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 36px;
@@ -430,16 +434,16 @@
   }
 
   .finding-title {
-    font-size: 15px;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ash);
     margin-bottom: 12px;
   }
 
   .finding-desc {
-    font-size: 13px;
-    color: var(--text-dim);
-    line-height: 1.7;
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.8;
   }
 
   .finding-card.highlight {
@@ -457,7 +461,7 @@
   }
 
   /* TECH STACK */
-  .tech { background: var(--ash); }
+  .tech { background: var(--bg-page); }
 
   .tech-grid {
     display: grid;
@@ -467,7 +471,7 @@
   }
 
   .tech-item {
-    background: var(--smoke);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 4px;
     padding: 28px 24px;
@@ -483,20 +487,20 @@
   }
 
   .tech-name {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ash);
     margin-bottom: 4px;
   }
 
   .tech-role {
-    font-size: 11px;
+    font-size: 13px;
     color: var(--text-dim);
     font-family: 'DM Mono', monospace;
   }
 
   /* DAX SHOWCASE */
-  .dax-section { background: var(--smoke); }
+  .dax-section { background: var(--bg-section); }
 
   .dax-showcase {
     margin-top: 60px;
@@ -506,7 +510,7 @@
   }
 
   .dax-card {
-    background: var(--ash);
+    background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 4px;
     overflow: hidden;
@@ -515,6 +519,7 @@
   .dax-header {
     padding: 16px 20px;
     border-bottom: 1px solid var(--border);
+    background: var(--bg-section);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -538,10 +543,11 @@
   .dax-code {
     padding: 20px;
     font-family: 'DM Mono', monospace;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1.8;
     color: var(--text-muted);
     overflow-x: auto;
+    background: var(--bg-page);
   }
 
   .kw { color: #569CD6; }
@@ -555,16 +561,16 @@
   /* CTA SECTION */
   .cta-section {
     background: var(--ash);
-    border-top: 1px solid var(--border);
+    border-top: 1px solid rgba(240,237,228,0.08);
     text-align: center;
     padding: 100px 60px;
   }
 
-  .cta-section h2 { margin-bottom: 16px; }
+  .cta-section h2 { margin-bottom: 16px; color: #F0EDE8; }
 
   .cta-section p {
-    color: var(--text-muted);
-    font-size: 16px;
+    color: rgba(240,237,228,0.6);
+    font-size: 18px;
     font-weight: 300;
     max-width: 480px;
     margin: 0 auto 40px;
@@ -615,7 +621,7 @@
   @media (max-width: 900px) {
     nav, section, footer { padding-left: 24px; padding-right: 24px; }
     .hero-content { padding: 60px 24px; }
-    .overview-grid, .findings-grid, .method-steps, .tech-grid, .dax-showcase { grid-template-columns: 1fr; }
+    .overview-grid, .findings-grid, .method-steps, .tech-grid, .dax-showcase, .hero-content { grid-template-columns: 1fr; }
     .finding-card.highlight { grid-column: span 1; grid-template-columns: 1fr; }
     .hero-footer { grid-template-columns: 1fr 1fr; }
     .hero-stat { padding: 24px; }
@@ -645,21 +651,25 @@
   <div class="hero-grain"></div>
 
   <div class="hero-content">
-    <div class="hero-tag">Case Study — 2020–2024</div>
-    <h1>Greece<br><span>Wildfire</span><br>Analysis</h1>
-    <p class="hero-desc">
-      A 5-year data analysis of wildfire incidents across Greece, combining Greek Fire Service records, hourly meteorological data, and geographic coordinates to uncover patterns, risk factors, and resource effectiveness.
-    </p>
-    <div class="hero-cta">
-      <a href="#findings" class="btn-primary">↓ View Findings</a>
-      <a href="https://drive.google.com/file/d/1npPH_aG50PyfU7GB8guyf3dbLT3plkR1/view?usp=sharing" class="btn-secondary" target="_blank">↗ Live Report</a>
+    <div>
+      <div class="hero-tag">Case Study — 2020–2024</div>
+      <p class="hero-desc">
+        A 5-year data analysis of wildfire incidents across Greece, combining Greek Fire Service records, hourly meteorological data, and geographic coordinates to uncover patterns, risk factors, and resource effectiveness.
+      </p>
+      <div class="hero-cta">
+        <a href="#findings" class="btn-primary">↓ View Findings</a>
+        <a href="https://drive.google.com/file/d/1npPH_aG50PyfU7GB8guyf3dbLT3plkR1/view?usp=sharing" class="btn-secondary" target="_blank">↗ Live Report</a>
+      </div>
+    </div>
+    <div>
+      <h1>Greece<br><span>Wildfire</span><br>Analysis</h1>
     </div>
   </div>
 
   <div class="hero-footer">
     <div class="hero-stat">
       <div class="hero-stat-val">3.87M</div>
-      <div class="hero-stat-lbl">Στρ Total Burned</div>
+      <div class="hero-stat-lbl">Acres Burned</div>
     </div>
     <div class="hero-stat">
       <div class="hero-stat-val">27K</div>
@@ -781,20 +791,20 @@
       </div>
       <div>
         <div class="finding-title">Extreme Conditions Drive Catastrophic Outcomes</div>
-        <p class="finding-desc">Just 1.41% of fires ignite under "Extreme" FWI conditions — yet they produce an average burned area of ~450 Στρ per incident, compared to ~5 Στρ under Low conditions. The vast majority of incidents (44.7%) occur under Moderate conditions, yet cause a fraction of the total damage. This confirms that early intervention in high-FWI scenarios is the highest-leverage policy intervention available.</p>
+        <p class="finding-desc">Just 1.41% of fires ignite under "Extreme" FWI conditions — yet they produce an average burned area of ~450 acres per incident, compared to ~5 acres under Low conditions. The vast majority of incidents (44.7%) occur under Moderate conditions, yet cause a fraction of the total damage. This confirms that early intervention in high-FWI scenarios is the highest-leverage policy intervention available.</p>
       </div>
     </div>
 
     <div class="finding-card">
       <div class="finding-num">2023</div>
       <div class="finding-title">Worst Year on Record</div>
-      <p class="finding-desc">2023 saw 1.74M Στρ burned — a +520% YoY surge — following a relative calm in 2022 (0.24M). A clear 2-year catastrophic cycle emerged: 2021 (+525% YoY) and 2023 (+520% YoY) were both devastating years, suggesting a compounding fuel load dynamic.</p>
+      <p class="finding-desc">2023 saw 1.74M acres burned — a +520% YoY surge — following a relative calm in 2022 (0.24M). A clear 2-year catastrophic cycle emerged: 2021 (+525% YoY) and 2023 (+520% YoY) were both devastating years, suggesting a compounding fuel load dynamic.</p>
     </div>
 
     <div class="finding-card">
-      <div class="finding-num">770<span> Στρ</span></div>
+      <div class="finding-num">770<span> acres</span></div>
       <div class="finding-title">Burned Area per Aircraft</div>
-      <p class="finding-desc">Each aerial asset is associated with 770 Στρ of burned area — the highest of all resource types. Evros and Euboea are consistent outliers: high burned area combined with long completion times, suggesting structural resource gaps in northeastern Greece.</p>
+      <p class="finding-desc">Each aerial asset is associated with 770 acres of burned area — the highest of all resource types. Evros and Euboea are consistent outliers: high burned area combined with long completion times, suggesting structural resource gaps in northeastern Greece.</p>
     </div>
 
     <div class="finding-card">
