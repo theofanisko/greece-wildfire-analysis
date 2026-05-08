@@ -376,6 +376,7 @@ footer p { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospa
   <div class="section-tag">Key Findings</div>
   <h2>What The Data Reveals</h2>
   <div class="findings-grid">
+    <!-- 1. Wide card -->
     <div class="finding-card wide">
       <div><div class="finding-num big">1.41%</div></div>
       <div>
@@ -383,25 +384,35 @@ footer p { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospa
         <p class="finding-desc">Just 1.41% of fires ignite under "Extreme" FWI conditions — yet they produce an average burned area of ~450 acres per incident, compared to ~5 acres under Low conditions. The vast majority of incidents (44.7%) occur under Moderate conditions, yet cause a fraction of the total damage. This confirms that early intervention in high-FWI scenarios is the highest-leverage policy intervention available.</p>
       </div>
     </div>
+    <!-- 2. Worst Year -->
     <div class="finding-card">
       <div class="finding-num">2023</div>
       <div class="finding-title">Worst Year on Record</div>
-      <p class="finding-desc">2023 saw 1.74M acres burned — a +520% YoY surge — following a relative calm in 2022 (0.24M). A clear 2-year catastrophic cycle emerged: 2021 (+525% YoY) and 2023 (+520% YoY) were both devastating years, suggesting a compounding fuel load dynamic.</p>
+      <p class="finding-desc">2023 saw 1.74M acres burned — a +520% YoY surge — following a relative calm in 2022 (0.24M acres). The most destructive year in the 5-year dataset, with total completion hours peaking at 2M.</p>
     </div>
-    <div class="finding-card">
-      <div class="finding-num">770 acres</div>
-      <div class="finding-title">Burned Area per Aircraft</div>
-      <p class="finding-desc">Each aerial asset is associated with 770 acres of burned area — the highest of all resource types. Evros and Euboea are consistent outliers: high burned area combined with long completion times, suggesting structural resource gaps in northeastern Greece.</p>
-    </div>
+    <!-- 3. July Peak -->
     <div class="finding-card">
       <div class="finding-num">July</div>
       <div class="finding-title">Peak Risk Month</div>
       <p class="finding-desc">July records the highest incident count (6K), followed by August (5.2K). The FWI index peaks in these months, and the line chart confirms that average burned area closely follows the FWI curve — validating the index as a reliable seasonal predictor.</p>
     </div>
+    <!-- 4. Biennial Cycle — NEW -->
     <div class="finding-card">
-      <div class="finding-num">−</div>
-      <div class="finding-title">Humidity & Temperature: Inverse Correlation</div>
-      <p class="finding-desc">A strong negative correlation exists between temperature and relative humidity at ignition time. As temperatures exceed 35°C, humidity drops below 20%, creating the conditions most associated with rapid fire spread.</p>
+      <div class="finding-num">+525% / +520%</div>
+      <div class="finding-title">Biennial Cycle 2021/2023</div>
+      <p class="finding-desc">A clear 2-year catastrophic cycle emerged: 2021 (+525% YoY) and 2023 (+520% YoY) were both devastating years, while 2022 and 2024 saw sharp contractions (−72% each). This pattern suggests a compounding fuel load dynamic — vegetation recovers in the calm year, then burns catastrophically the next.</p>
+    </div>
+    <!-- 5. Structural Gap -->
+    <div class="finding-card">
+      <div class="finding-num">Evros &amp; Euboea</div>
+      <div class="finding-title">Structural Gap</div>
+      <p class="finding-desc">These two prefectures are consistent outliers across all metrics: highest burned area, longest completion times, and highest aerial asset deployment — yet outcomes remain disproportionately severe. High resources, poor outcomes: a structural resourcing and response deficit that single-year interventions cannot resolve.</p>
+    </div>
+    <!-- 6. 770 acres/aircraft -->
+    <div class="finding-card">
+      <div class="finding-num">770 acres</div>
+      <div class="finding-title">Burned Area per Aircraft Deployed</div>
+      <p class="finding-desc">Each aerial asset is associated with 770 acres of burned area — the highest of all resource types (38.8 acres/vehicle, 15.3 acres/person). This suggests aircraft are deployed reactively in the largest fires, raising questions about pre-emptive vs. reactive deployment strategy.</p>
     </div>
   </div>
 </section>
